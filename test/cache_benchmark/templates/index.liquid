@@ -1,0 +1,5 @@
+{% for block in blocks %}
+    {% capture block_name %}block--{{ block.type}}{% endcapture %}
+    {% render block_name, content: block.content %}
+{% endfor %}
+X

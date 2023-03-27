@@ -51,8 +51,12 @@ defmodule Solid.Tag.Render do
 
     {file_system, instance} = options[:file_system] || {Solid.BlankFileSystem, nil}
 
-    template_str = file_system.read_template_file(template, instance)
-    template = Solid.parse!(template_str, options)
+    template =
+      case file_system.read_template_file(template, instance) do
+        template = %Solid.Template{} -> template
+        template_str -> Solid.parse!(template_str, options)
+      end
+
     # FIXME need to sort out context error stuff :thinking: + tests
     case Solid.render(template, binding_vars, options) do
       {:ok, rendered_text} ->
